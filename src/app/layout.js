@@ -23,11 +23,8 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="min-h-screen">
-      <Navbar/>
-      <main>
-        {children}
-      </main>
+      <body suppressHydrationWarning={true}>
+          {children}
       </body>
     </html>
   );
