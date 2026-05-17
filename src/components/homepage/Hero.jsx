@@ -47,8 +47,8 @@ const Hero = () => {
         {/* Headline */}
         <motion.div variants={fadeUp(0.1)}>
           <h2 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-3 leading-tight'>
-            Where Every Story <br className='hidden sm:block' />
-            Finds Its Reader
+            Find Your Next Read
+            
           </h2>
           <p className='text-base md:text-lg text-gray-300'>
             Browse thousands of titles, borrow digitally, and carry your{' '}
@@ -73,7 +73,7 @@ const Hero = () => {
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
-              Browse Collection
+              Browse Now
             </motion.button>
           </Link>
 
