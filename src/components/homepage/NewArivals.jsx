@@ -11,7 +11,7 @@ const NewArivals = async() => {
     const books = await getBooks()
     console.log(books)
     return (
-        <div className='bg-[#1a1a18] border-t border-b border-[#2e2e2b] py-2.5 overflow-hidden'>
+        <div className='bg-[#1a1a18] border-t border-b border-[#2e2e2b] py-5 overflow-hidden'>
       <Marquee
         speed={40}
         gradient={true}

@@ -2,109 +2,121 @@
   {
     "id": 1,
     "title": "The Silent Forest",
+    "price":22,
     "author": "Emma Carter",
     "description": "A mysterious adventure about a group of explorers uncovering secrets hidden deep inside an ancient forest.",
     "category": "Story",
     "available_quantity": 14,
-    "image_url": "https://example.com/images/the-silent-forest.jpg"
+    "image_url": "https://i.ibb.co.com/2BWMkDz/Forest.jpg"
   },
   {
     "id": 2,
     "title": "Mastering JavaScript",
+    "price":45,
     "author": "Daniel Brooks",
     "description": "A practical guide to modern JavaScript development, covering ES6+, APIs, and real-world applications.",
     "category": "Tech",
     "available_quantity": 8,
-    "image_url": "https://example.com/images/mastering-javascript.jpg"
+    "image_url": "https://i.ibb.co.com/0VjZGn4X/javascript.webp"
   },
   {
     "id": 3,
     "title": "Beyond the Stars",
+    "price":20,
     "author": "Sophia Lane",
     "description": "An exciting journey through the universe, exploring galaxies, black holes, and the mysteries of space.",
     "category": "Science",
     "available_quantity": 11,
-    "image_url": "https://example.com/images/beyond-the-stars.jpg"
+    "image_url": "https://i.ibb.co.com/gMw6HdFX/stars.jpg"
   },
   {
     "id": 4,
     "title": "The Lost Kingdom",
+    "price":25,
     "author": "Michael Reed",
     "description": "A fantasy tale of courage and betrayal in a forgotten kingdom ruled by ancient magic.",
     "category": "Story",
     "available_quantity": 6,
-    "image_url": "https://example.com/images/the-lost-kingdom.jpg"
+    "image_url": "https://i.ibb.co.com/zWgcgTpz/lostkingdom.jpg"
   },
   {
     "id": 5,
     "title": "AI for Beginners",
+    "price":40,
     "author": "Laura Mitchell",
     "description": "An introduction to artificial intelligence, machine learning, and neural networks for newcomers.",
     "category": "Tech",
     "available_quantity": 10,
-    "image_url": "https://example.com/images/ai-for-beginners.jpg"
+    "image_url": "https://i.ibb.co.com/4wsVFtZX/quantam.jpg"
   },
   {
     "id": 6,
     "title": "Quantum Discoveries",
+    "price":15,
     "author": "Ethan Walker",
     "description": "A deep dive into quantum physics and the groundbreaking discoveries shaping modern science.",
     "category": "Science",
     "available_quantity": 7,
-    "image_url": "https://example.com/images/quantum-discoveries.jpg"
+    "image_url": "https://i.ibb.co.com/WNNq2QQL/ai.webp"
   },
   {
     "id": 7,
     "title": "Whispers of the Ocean",
+    "price":35,
     "author": "Olivia Bennett",
     "description": "A heartfelt story about friendship, courage, and survival on a remote island.",
     "category": "Story",
     "available_quantity": 13,
-    "image_url": "https://example.com/images/whispers-of-the-ocean.jpg"
+    "image_url": "https://i.ibb.co.com/qYdbHnrr/ocean.jpg"
   },
   {
     "id": 8,
     "title": "Cybersecurity Essentials",
+    "price":30,
     "author": "Ryan Cooper",
     "description": "Learn the fundamentals of cybersecurity, ethical hacking, and protecting digital systems.",
     "category": "Tech",
     "available_quantity": 9,
-    "image_url": "https://example.com/images/cybersecurity-essentials.jpg"
+    "image_url": "https://i.ibb.co.com/s92bPkBx/cyber.jpg"
   },
   {
     "id": 9,
     "title": "The Human Brain",
+    "price":25,
     "author": "Natalie Green",
     "description": "An insightful exploration of the human brain, neuroscience, and cognitive behavior.",
     "category": "Science",
     "available_quantity": 5,
-    "image_url": "https://example.com/images/the-human-brain.jpg"
+    "image_url": "https://i.ibb.co.com/svBZPz61/humanbrain.jpg"
   },
   {
     "id": 10,
     "title": "Shadows of Midnight",
+    "price":20,
     "author": "Jacob Turner",
     "description": "A suspense-filled thriller where a detective races against time to solve a chilling mystery.",
     "category": "Story",
     "available_quantity": 12,
-    "image_url": "https://example.com/images/shadows-of-midnight.jpg"
+    "image_url": "https://i.ibb.co.com/7dwRVwPn/shadow.jpg"
   },
   {
     "id": 11,
     "title": "Cloud Computing Basics",
+    "price":30,
     "author": "Grace Hall",
     "description": "A beginner-friendly guide to cloud infrastructure, virtualization, and scalable applications.",
     "category": "Tech",
     "available_quantity": 15,
-    "image_url": "https://example.com/images/cloud-computing-basics.jpg"
+    "image_url": "https://i.ibb.co.com/ycN2wp0Z/cloud.webp"
   },
   {
     "id": 12,
     "title": "Evolution and Life",
+    "price":28,
     "author": "Henry Adams",
     "description": "An engaging overview of biological evolution and the diversity of life on Earth.",
     "category": "Science",
     "available_quantity": 4,
-    "image_url": "https://example.com/images/evolution-and-life.jpg"
+    "image_url": "https://i.ibb.co.com/wNHTbYVh/life.jpg"
   }
 ]

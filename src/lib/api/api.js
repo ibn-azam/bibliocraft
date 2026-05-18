@@ -8,3 +8,13 @@ export async function getBooks() {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   return JSON.parse(fileContent);
 }
+
+export async function getFeaturedBooksById(id) {
+  const filePath = path.join(process.cwd(), "public", "data.json");
+
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+
+  const books = JSON.parse(fileContent);
+
+  return books.find(book => book.id === parseInt(id));
+}
