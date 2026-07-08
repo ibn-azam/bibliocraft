@@ -1,4 +1,5 @@
 import FetaruedBooksPage from "@/app/(main)/books/featuredbooks/page";
+import AboutUs from "@/components/homepage/AboutUs";
 import Hero from "@/components/homepage/Hero";
 import NewArivals from "@/components/homepage/NewArivals";
 import ReaderReviews from "@/components/homepage/Reviews";
@@ -12,6 +13,7 @@ export default function Home() {
       <NewArivals/>
       <FetaruedBooksPage/>
       <ReaderReviews/>
+      <AboutUs/>
       <Footer/>
     </>
   );

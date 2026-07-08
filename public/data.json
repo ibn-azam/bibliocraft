@@ -91,13 +91,13 @@
   },
   {
     "id": 10,
-    "title": "Shadows of Midnight",
+    "title": "Machine Learning",
     "price":20,
     "author": "Jacob Turner",
     "description": "A suspense-filled thriller where a detective races against time to solve a chilling mystery.",
     "category": "Story",
     "available_quantity": 12,
-    "image_url": "https://i.ibb.co.com/7dwRVwPn/shadow.jpg"
+    "image_url": "https://i.ibb.co.com/xKbs9YN7/machine.jpg"
   },
   {
     "id": 11,
