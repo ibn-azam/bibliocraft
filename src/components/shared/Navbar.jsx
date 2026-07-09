@@ -3,8 +3,15 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { authClient } from '@/lib/auth-client';
+import Image from 'next/image';
 
 const Navbar = () => {
+
+    const { data: session , isPending } = authClient.useSession();
+    const user = session?.user;
+    console.log(user,"user")
+    
     const [isScrolled, setIsScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -107,7 +114,31 @@ const Navbar = () => {
                     </ul>
 
                     {/* ── Desktop CTA Buttons ── */}
-                    <div className="hidden md:flex items-center gap-3">
+                   {isPending ? (<span className="loading loading-spinner text-warning"></span>) : user ? ( <div className="hidden md:flex items-center gap-3">
+                    <h2 className='text-[#e8d5a3] font-semibold'>Hello,{user.name}</h2>
+                        <Link href="/login">
+                            <motion.button
+                                className="px-5 py-2 rounded-lg text-sm font-semibold"
+                                onClick={async()=> await authClient.signOut()}
+                                style={{
+                                    background: 'transparent',
+                                    border: '1px solid rgba(232,213,163,0.4)',
+                                    color: '#e8d5a3',
+                                    fontFamily: 'Georgia, serif',
+                                }}
+                                whileHover={{
+                                    background: 'rgba(232,213,163,0.08)',
+                                    borderColor: '#e8d5a3',
+                                    scale: 1.03,
+                                }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                            >
+                                Logout
+                            </motion.button>
+                        </Link>
+                        
+                    </div>) :  (<div className="hidden md:flex items-center gap-3">
                         <Link href="/login">
                             <motion.button
                                 className="px-5 py-2 rounded-lg text-sm font-semibold"
@@ -147,7 +178,7 @@ const Navbar = () => {
                                 Sign Up
                             </motion.button>
                         </Link>
-                    </div>
+                    </div>)}
 
                     {/* ── Mobile Hamburger ── */}
                     <motion.button
@@ -236,7 +267,25 @@ const Navbar = () => {
                             ))}
 
                             {/* Mobile Auth Buttons */}
-                            <div className="pt-4 mt-2 flex flex-col gap-2"
+                           {isPending ? (<span className="loading loading-spinner text-warning"></span>) : user ? ( <div className="pt-4 mt-2 flex flex-col gap-2"
+                                style={{ borderTop: '1px solid rgba(232,213,163,0.1)' }}>
+                                     <h2 className='text-[#e8d5a3] font-semibold'>Hello,{user.name}</h2>
+                                    
+                                <Link href="/login" onClick={() => setMenuOpen(false)}>
+                                    <button
+                                        className="w-full py-2.5 rounded-xl text-sm font-semibold"
+                                        onClick={async()=> await authClient.signOut()}
+                                        style={{
+                                            border: '1px solid rgba(232,213,163,0.3)',
+                                            color: '#e8d5a3',
+                                            fontFamily: 'Georgia, serif',
+                                        }}
+                                    >
+                                        Logout
+                                    </button>
+                                </Link>
+                               
+                            </div>):  <div className="pt-4 mt-2 flex flex-col gap-2"
                                 style={{ borderTop: '1px solid rgba(232,213,163,0.1)' }}>
                                 <Link href="/login" onClick={() => setMenuOpen(false)}>
                                     <button
@@ -262,7 +311,7 @@ const Navbar = () => {
                                         Sign Up
                                     </button>
                                 </Link>
-                            </div>
+                            </div>}
                         </div>
                     </motion.div>
                 )}
