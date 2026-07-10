@@ -110,7 +110,7 @@ const Hero = () => {
             className="flex flex-wrap gap-3 justify-center md:justify-start"
             variants={fadeUp(0.25)}
           >
-            <Link href="/login">
+            <Link href="/books">
               <motion.button
                 className="px-7 py-3 rounded-xl font-semibold text-sm tracking-wide"
                 style={{
@@ -130,7 +130,7 @@ const Hero = () => {
               </motion.button>
             </Link>
 
-            <Link href="/signup">
+            <Link href="/login">
               <motion.button
                 className="px-7 py-3 rounded-xl font-semibold text-sm tracking-wide"
                 style={{

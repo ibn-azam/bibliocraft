@@ -4,6 +4,8 @@ import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { motion, useReducedMotion } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fadeUp = (delay = 0) => ({
   hidden: { opacity: 0, y: 28 },
@@ -30,6 +32,8 @@ const LogInPage = () => {
       rememberMe: true,
       callbackURL: "/",
     });
+    if (error) toast.error(error.message);
+    if (res) toast.success("Signed in successfully!");
   };
 
   const handleGoogleLogin = async () => {
@@ -41,6 +45,25 @@ const LogInPage = () => {
       className="relative min-h-screen overflow-hidden flex items-center justify-center px-4 py-12"
       style={{ background: "linear-gradient(180deg, #0f0c07 0%, #1a1508 60%, #0f0c07 100%)" }}
     >
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        toastStyle={{
+          background: "#1a1508",
+          border: "1px solid rgba(232,213,163,0.2)",
+          color: "#e8d5a3",
+          fontFamily: "Georgia, serif",
+          fontSize: "13px",
+        }}
+        progressStyle={{
+          background: "linear-gradient(135deg, #e8d5a3, #c4a05a)",
+        }}
+      />
+
       {/* Ambient glow blobs */}
       <div
         className="pointer-events-none absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full opacity-20 blur-[120px]"

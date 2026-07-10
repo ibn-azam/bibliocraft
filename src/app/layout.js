@@ -28,6 +28,7 @@ export default function RootLayout({ children }) {
     >
       <body className="bg-[#1a1a18]" suppressHydrationWarning={true}>
           {children}
+          
       </body>
     </html>
   );
