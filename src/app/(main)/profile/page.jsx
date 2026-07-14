@@ -2,15 +2,10 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-
-const user = {
-    name: 'Sophia Lennox',
-    email: 'sophia@bibliocraft.com',
-    photoURL: 'https://api.dicebear.com/7.x/lorelei/svg?seed=Sophia',
-    phone: '+1 234 567 890',
-    bio: 'Passionate reader and literary explorer. Always chasing the next great story.',
-    joinDate: 'January 2024',
-};
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import EditProfileModal from '@/components/profile/EditProfileModal';
+import { toast } from 'react-toastify';
 
 const tabs = [
     { key: 'profile',  label: '👤 Profile'  },
@@ -31,20 +26,76 @@ const labelStyle = {
 };
 
 const ProfilePage = () => {
+    const router = useRouter();
+    const { data: session, isPending, refetch } = authClient.useSession();
     const [activeTab, setActiveTab] = useState('profile');
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleSignOut = async () => {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push('/login');
+                },
+            },
+        });
+    };
+
+    if (isPending) {
+        return (
+            <main
+                className="min-h-screen flex items-center justify-center"
+                style={{ background: 'linear-gradient(180deg, #0f0c07 0%, #1a1508 40%, #0f0c07 100%)' }}
+            >
+                <p style={{ color: '#c4a05a', fontFamily: 'Georgia, serif' }}>Loading profile...</p>
+            </main>
+        );
+    }
+
+    if (!session?.user) {
+        return (
+            <main
+                className="min-h-screen flex flex-col items-center justify-center gap-4"
+                style={{ background: 'linear-gradient(180deg, #0f0c07 0%, #1a1508 40%, #0f0c07 100%)' }}
+            >
+                <p style={{ color: '#c4a05a', fontFamily: 'Georgia, serif' }}>
+                    You need to be signed in to view this page.
+                </p>
+                <Link href="/login">
+                    <button
+                        className="px-6 py-2 rounded-xl text-sm font-semibold"
+                        style={{
+                            background: 'linear-gradient(135deg, #e8d5a3, #c4a05a)',
+                            color: '#0f0c07',
+                        }}
+                    >
+                        Go to Login
+                    </button>
+                </Link>
+            </main>
+        );
+    }
+
+    const user = {
+        name: session.user.name || 'Unnamed Reader',
+        email: session.user.email || '',
+        photoURL: session.user.image || `https://api.dicebear.com/7.x/lorelei/svg?seed=${session.user.email}`,
+        phone: session.user.phone || '',
+        bio: session.user.bio || '',
+        joinDate: session.user.createdAt
+            ? new Date(session.user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+            : '—',
+    };
 
     return (
         <main
             className="min-h-screen relative"
             style={{ background: 'linear-gradient(180deg, #0f0c07 0%, #1a1508 40%, #0f0c07 100%)' }}
         >
-            {/* Top border */}
             <div
                 className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: 'linear-gradient(90deg, transparent, #e8d5a3, transparent)' }}
             />
-
-            {/* Ambient glow */}
             <div
                 className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-10 blur-[120px]"
                 style={{ background: '#a07840' }}
@@ -52,7 +103,6 @@ const ProfilePage = () => {
 
             <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-10 py-20 space-y-8">
 
-                {/* ── Page Heading ── */}
                 <div className="text-center">
                     <p
                         className="text-xs uppercase tracking-[0.4em] mb-2"
@@ -72,7 +122,6 @@ const ProfilePage = () => {
                     />
                 </div>
 
-                {/* ── Avatar Card ── */}
                 <div
                     className="rounded-3xl p-6 flex flex-col sm:flex-row items-center gap-6 relative overflow-hidden"
                     style={{
@@ -81,56 +130,41 @@ const ProfilePage = () => {
                         boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
                     }}
                 >
-                    {/* Corner glow */}
                     <div
                         className="pointer-events-none absolute -top-12 -right-12 w-40 h-40 opacity-10 blur-3xl"
                         style={{ background: 'radial-gradient(circle, #e8d5a3, transparent)' }}
                     />
 
-                    {/* Avatar */}
                     <div className="relative flex-shrink-0">
                         <div
                             className="w-24 h-24 rounded-2xl overflow-hidden"
                             style={{ border: '2px solid rgba(232,213,163,0.25)' }}
                         >
-                            <img
-                                src={user.photoURL}
-                                alt={user.name}
-                                className="w-full h-full object-cover"
-                            />
+                            <img src={user.photoURL} alt={user.name} className="w-full h-full object-cover" />
                         </div>
-                        {/* Online dot */}
                         <div
                             className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full"
                             style={{ background: '#4ade80', border: '2px solid #16120a' }}
                         />
                     </div>
 
-                    {/* Info */}
                     <div className="text-center sm:text-left flex-1 space-y-1">
-                        <h2
-                            className="text-2xl font-bold"
-                            style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}
-                        >
+                        <h2 className="text-2xl font-bold" style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
                             {user.name}
                         </h2>
-                        <p className="text-sm" style={{ color: '#7a6a4a' }}>
-                            {user.email}
-                        </p>
-                        <p
-                            className="text-xs italic"
-                            style={{ color: '#5a4a2a', fontFamily: 'Georgia, serif' }}
-                        >
-                            "{user.bio}"
-                        </p>
+                        <p className="text-sm" style={{ color: '#7a6a4a' }}>{user.email}</p>
+                        {user.bio && (
+                            <p className="text-xs italic" style={{ color: '#5a4a2a', fontFamily: 'Georgia, serif' }}>
+                                "{user.bio}"
+                            </p>
+                        )}
                         <p className="text-xs" style={{ color: '#3a3020' }}>
-                            Member since{' '}
-                            <span style={{ color: '#5a4a2a' }}>{user.joinDate}</span>
+                            Member since <span style={{ color: '#5a4a2a' }}>{user.joinDate}</span>
                         </p>
                     </div>
 
-                    {/* Edit button */}
                     <button
+                        onClick={() => setModalOpen(true)}
                         className="flex-shrink-0 self-start px-5 py-2 rounded-xl text-sm font-semibold"
                         style={{
                             border: '1px solid rgba(232,213,163,0.2)',
@@ -153,13 +187,9 @@ const ProfilePage = () => {
                     </button>
                 </div>
 
-                {/* ── Tabs ── */}
                 <div
                     className="flex gap-1 p-1 rounded-2xl"
-                    style={{
-                        background: 'rgba(232,213,163,0.04)',
-                        border: '1px solid rgba(232,213,163,0.08)',
-                    }}
+                    style={{ background: 'rgba(232,213,163,0.04)', border: '1px solid rgba(232,213,163,0.08)' }}
                 >
                     {tabs.map(({ key, label }) => (
                         <button
@@ -169,13 +199,9 @@ const ProfilePage = () => {
                             style={{
                                 fontFamily: 'Georgia, serif',
                                 transition: 'all 0.25s ease',
-                                background: activeTab === key
-                                    ? 'linear-gradient(135deg, #e8d5a3, #c4a05a)'
-                                    : 'transparent',
+                                background: activeTab === key ? 'linear-gradient(135deg, #e8d5a3, #c4a05a)' : 'transparent',
                                 color: activeTab === key ? '#0f0c07' : '#7a6a4a',
-                                boxShadow: activeTab === key
-                                    ? '0 2px 12px rgba(232,213,163,0.2)'
-                                    : 'none',
+                                boxShadow: activeTab === key ? '0 2px 12px rgba(232,213,163,0.2)' : 'none',
                             }}
                         >
                             {label}
@@ -183,9 +209,6 @@ const ProfilePage = () => {
                     ))}
                 </div>
 
-                {/* ══════════════════
-                    TAB 1 — Profile
-                ══════════════════ */}
                 {activeTab === 'profile' && (
                     <div
                         className="rounded-3xl p-8 space-y-6"
@@ -195,171 +218,38 @@ const ProfilePage = () => {
                             boxShadow: '0 12px 40px rgba(0,0,0,0.3)',
                         }}
                     >
-                        <div>
-                            <p className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                Personal Info
-                            </p>
-                            <h3
-                                className="text-lg font-bold mt-0.5"
-                                style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-xs uppercase tracking-widest" style={labelStyle}>Personal Info</p>
+                                <h3 className="text-lg font-bold mt-0.5" style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
+                                    Your Details
+                                </h3>
+                            </div>
+                            <button
+                                onClick={() => setModalOpen(true)}
+                                className="text-xs px-4 py-2 rounded-xl font-semibold"
+                                style={{ background: 'linear-gradient(135deg, #e8d5a3, #c4a05a)', color: '#0f0c07' }}
                             >
                                 Edit Profile
-                            </h3>
+                            </button>
                         </div>
 
                         <div className="space-y-5">
-
-                            {/* Full Name */}
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                    Full Name
-                                </label>
-                                <input
-                                    type="text"
-                                    defaultValue={user.name}
-                                    placeholder="Your full name"
-                                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                                    style={inputStyle}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.45)';
-                                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(160,120,64,0.1)';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.15)';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                    }}
-                                />
-                            </div>
-
-                            {/* Email */}
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                    Email Address
-                                </label>
-                                <input
-                                    type="email"
-                                    defaultValue={user.email}
-                                    placeholder="your@email.com"
-                                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                                    style={inputStyle}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.45)';
-                                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(160,120,64,0.1)';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.15)';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                    }}
-                                />
-                            </div>
-
-                            {/* Phone */}
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="tel"
-                                    defaultValue={user.phone}
-                                    placeholder="+1 234 567 890"
-                                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                                    style={inputStyle}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.45)';
-                                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(160,120,64,0.1)';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.15)';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                    }}
-                                />
-                            </div>
-
-                            {/* Photo URL */}
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                    Photo URL
-                                </label>
-                                <div className="flex gap-3 items-center">
-                                    <input
-                                        type="url"
-                                        defaultValue={user.photoURL}
-                                        placeholder="https://your-photo-url.com"
-                                        className="flex-1 px-4 py-3 rounded-xl text-sm outline-none"
-                                        style={inputStyle}
-                                        onFocus={(e) => {
-                                            e.currentTarget.style.borderColor = 'rgba(232,213,163,0.45)';
-                                            e.currentTarget.style.boxShadow = '0 0 0 3px rgba(160,120,64,0.1)';
-                                        }}
-                                        onBlur={(e) => {
-                                            e.currentTarget.style.borderColor = 'rgba(232,213,163,0.15)';
-                                            e.currentTarget.style.boxShadow = 'none';
-                                        }}
-                                    />
-                                    {/* Avatar preview */}
-                                    <div
-                                        className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0"
-                                        style={{ border: '1px solid rgba(232,213,163,0.2)' }}
-                                    >
-                                        <img
-                                            src={user.photoURL}
-                                            alt="preview"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
+                            {[
+                                { label: 'Full Name', value: user.name },
+                                { label: 'Email Address', value: user.email },
+                                { label: 'Phone Number', value: user.phone || '—' },
+                                { label: 'Bio', value: user.bio || '—' },
+                            ].map(({ label, value }) => (
+                                <div key={label} className="space-y-2">
+                                    <label className="text-xs uppercase tracking-widest" style={labelStyle}>{label}</label>
+                                    <div className="w-full px-4 py-3 rounded-xl text-sm" style={inputStyle}>{value}</div>
                                 </div>
-                            </div>
-
-                            {/* Bio */}
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                    Bio
-                                </label>
-                                <textarea
-                                    defaultValue={user.bio}
-                                    placeholder="Tell us about yourself..."
-                                    rows={3}
-                                    className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
-                                    style={inputStyle}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.45)';
-                                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(160,120,64,0.1)';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(232,213,163,0.15)';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                    }}
-                                />
-                            </div>
+                            ))}
                         </div>
-
-                        {/* Save button */}
-                        <button
-                            className="w-full py-3 rounded-xl text-sm font-semibold"
-                            style={{
-                                background: 'linear-gradient(135deg, #e8d5a3, #c4a05a)',
-                                color: '#0f0c07',
-                                fontFamily: 'Georgia, serif',
-                                boxShadow: '0 4px 20px rgba(232,213,163,0.2)',
-                                transition: 'all 0.25s',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.boxShadow = '0 6px 28px rgba(232,213,163,0.35)';
-                                e.currentTarget.style.transform = 'translateY(-1px)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.boxShadow = '0 4px 20px rgba(232,213,163,0.2)';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                            }}
-                        >
-                            Save Changes →
-                        </button>
                     </div>
                 )}
 
-                {/* ══════════════════
-                    TAB 2 — Password
-                ══════════════════ */}
                 {activeTab === 'password' && (
                     <div
                         className="rounded-3xl p-8 space-y-6"
@@ -370,27 +260,20 @@ const ProfilePage = () => {
                         }}
                     >
                         <div>
-                            <p className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                Security
-                            </p>
-                            <h3
-                                className="text-lg font-bold mt-0.5"
-                                style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}
-                            >
+                            <p className="text-xs uppercase tracking-widest" style={labelStyle}>Security</p>
+                            <h3 className="text-lg font-bold mt-0.5" style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
                                 Change Password
                             </h3>
                         </div>
 
                         <div className="space-y-5">
                             {[
-                                { label: 'Current Password',  placeholder: 'Enter current password'  },
-                                { label: 'New Password',       placeholder: 'Enter new password'       },
-                                { label: 'Confirm Password',   placeholder: 'Confirm new password'     },
+                                { label: 'Current Password', placeholder: 'Enter current password' },
+                                { label: 'New Password', placeholder: 'Enter new password' },
+                                { label: 'Confirm Password', placeholder: 'Confirm new password' },
                             ].map(({ label, placeholder }) => (
                                 <div key={label} className="space-y-2">
-                                    <label className="text-xs uppercase tracking-widest" style={labelStyle}>
-                                        {label}
-                                    </label>
+                                    <label className="text-xs uppercase tracking-widest" style={labelStyle}>{label}</label>
                                     <div className="relative">
                                         <input
                                             type="password"
@@ -427,23 +310,12 @@ const ProfilePage = () => {
                                 boxShadow: '0 4px 20px rgba(232,213,163,0.2)',
                                 transition: 'all 0.25s',
                             }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.boxShadow = '0 6px 28px rgba(232,213,163,0.35)';
-                                e.currentTarget.style.transform = 'translateY(-1px)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.boxShadow = '0 4px 20px rgba(232,213,163,0.2)';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                            }}
                         >
                             Update Password →
                         </button>
                     </div>
                 )}
 
-                {/* ══════════════════
-                    TAB 3 — Danger
-                ══════════════════ */}
                 {activeTab === 'danger' && (
                     <div
                         className="rounded-3xl p-8 space-y-5"
@@ -454,68 +326,52 @@ const ProfilePage = () => {
                         }}
                     >
                         <div>
-                            <p className="text-xs uppercase tracking-widest" style={{ color: '#f87171' }}>
-                                Danger Zone
-                            </p>
-                            <h3
-                                className="text-lg font-bold mt-0.5"
-                                style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}
-                            >
+                            <p className="text-xs uppercase tracking-widest" style={{ color: '#f87171' }}>Danger Zone</p>
+                            <h3 className="text-lg font-bold mt-0.5" style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
                                 Account Actions
                             </h3>
                         </div>
 
-                        {/* Sign out row */}
                         <div
                             className="flex items-center justify-between p-5 rounded-2xl"
-                            style={{
-                                background: 'rgba(232,213,163,0.03)',
-                                border: '1px solid rgba(232,213,163,0.08)',
-                            }}
+                            style={{ background: 'rgba(232,213,163,0.03)', border: '1px solid rgba(232,213,163,0.08)' }}
                         >
                             <div>
-                                <p className="text-sm font-semibold"
-                                    style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
+                                <p className="text-sm font-semibold" style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}>
                                     Sign Out
                                 </p>
                                 <p className="text-xs mt-0.5" style={{ color: '#5a4a2a' }}>
                                     Sign out of your Bibliocraft account.
                                 </p>
                             </div>
-                            <Link href="/login">
-                                <button
-                                    className="px-5 py-2 rounded-xl text-sm font-semibold"
-                                    style={{
-                                        border: '1px solid rgba(232,213,163,0.2)',
-                                        color: '#c4aa78',
-                                        fontFamily: 'Georgia, serif',
-                                        transition: 'all 0.25s',
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = 'rgba(232,213,163,0.08)';
-                                        e.currentTarget.style.color = '#e8d5a3';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = 'transparent';
-                                        e.currentTarget.style.color = '#c4aa78';
-                                    }}
-                                >
-                                    Sign Out
-                                </button>
-                            </Link>
+                            <button
+                                onClick={handleSignOut}
+                                className="px-5 py-2 rounded-xl text-sm font-semibold"
+                                style={{
+                                    border: '1px solid rgba(232,213,163,0.2)',
+                                    color: '#c4aa78',
+                                    fontFamily: 'Georgia, serif',
+                                    transition: 'all 0.25s',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(232,213,163,0.08)';
+                                    e.currentTarget.style.color = '#e8d5a3';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'transparent';
+                                    e.currentTarget.style.color = '#c4aa78';
+                                }}
+                            >
+                                Sign Out
+                            </button>
                         </div>
 
-                        {/* Delete account row */}
                         <div
                             className="flex items-center justify-between p-5 rounded-2xl"
-                            style={{
-                                background: 'rgba(248,113,113,0.04)',
-                                border: '1px solid rgba(248,113,113,0.12)',
-                            }}
+                            style={{ background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.12)' }}
                         >
                             <div>
-                                <p className="text-sm font-semibold"
-                                    style={{ color: '#f87171', fontFamily: 'Georgia, serif' }}>
+                                <p className="text-sm font-semibold" style={{ color: '#f87171', fontFamily: 'Georgia, serif' }}>
                                     Delete Account
                                 </p>
                                 <p className="text-xs mt-0.5" style={{ color: '#5a4a2a' }}>
@@ -546,16 +402,11 @@ const ProfilePage = () => {
                     </div>
                 )}
 
-                {/* ── Back link ── */}
                 <div className="text-center pb-4">
                     <Link href="/books">
                         <span
                             className="text-xs cursor-pointer"
-                            style={{
-                                color: '#5a4a2a',
-                                transition: 'color 0.2s',
-                                fontFamily: 'Georgia, serif',
-                            }}
+                            style={{ color: '#5a4a2a', transition: 'color 0.2s', fontFamily: 'Georgia, serif' }}
                             onMouseEnter={(e) => (e.currentTarget.style.color = '#e8d5a3')}
                             onMouseLeave={(e) => (e.currentTarget.style.color = '#5a4a2a')}
                         >
@@ -565,6 +416,17 @@ const ProfilePage = () => {
                 </div>
 
             </div>
+
+            <EditProfileModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                user={user}
+                onSuccess={() => {
+                    refetch();
+                    setModalOpen(false);
+                    toast.success('Profile updated successfully!');
+                }}
+            />
         </main>
     );
 };
