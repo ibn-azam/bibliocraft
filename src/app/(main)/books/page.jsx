@@ -17,7 +17,7 @@ const AllBooksPage = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch('/api/books');
+                const res = await fetch('/data.json');
                 const data = await res.json();
                 const uniqueCategories = [
                     'All',
@@ -43,7 +43,7 @@ const AllBooksPage = () => {
                 if (searchTerm) {
                     params.set('search', searchTerm);
                 }
-                const res = await fetch(`/api/books?${params.toString()}`);
+                const res = await fetch(`/data.json?${params.toString()}`);
                 const data = await res.json();
                 setBooks(data);
             } catch (err) {
