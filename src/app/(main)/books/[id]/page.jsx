@@ -11,7 +11,6 @@ const BookDetailsPage = async ({ params }) => {
     <div className="container mx-auto px-4 py-16 ">
       <div className="bg-[#1a1a18] border-b border-t border-[#2e2e2b] shadow-xl rounded-2xl overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-8">
-          
           {/* Book Image */}
           <div className="flex justify-center">
             <Image
@@ -25,21 +24,15 @@ const BookDetailsPage = async ({ params }) => {
 
           {/* Book Details */}
           <div className="flex flex-col justify-center space-y-5">
-            <h1 className="text-4xl font-bold">
-              {book.title}
-            </h1>
+            <h1 className="text-4xl font-bold">{book.title}</h1>
 
-            <p className="text-lg text-gray-500">
-              by {book.author}
-            </p>
+            <p className="text-lg text-gray-500">by {book.author}</p>
 
             <div className="badge badge-primary badge-lg w-fit">
               {book.category}
             </div>
 
-            <p className="text-base leading-7">
-              {book.description}
-            </p>
+            <p className="text-base leading-7">{book.description}</p>
 
             <div className="flex items-center gap-4">
               <span className="text-3xl font-bold text-[#e8d5a3]">

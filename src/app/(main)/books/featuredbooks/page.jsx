@@ -1,14 +1,14 @@
-import FeaturedBooksCard from '@/components/homepage/FeaturedBooksCard';
-import { getBooks } from '@/lib/api/api';
-import React from 'react';
+import FeaturedBooksCard from "@/components/homepage/FeaturedBooksCard";
+import { getBooks } from "@/lib/api/api";
+import React from "react";
 
 const FeaturedBooksPage = async () => {
-    const featuredBooks = await getBooks();
-    const books = [1, 4, 6, 9];
+  const featuredBooks = await getBooks();
+  const books = [1, 4, 6, 9];
 
-    return (
-        <section className="py-24 relative overflow-hidden featured-section">
-            <style>{`
+  return (
+    <section className="py-24 relative overflow-hidden featured-section">
+      <style>{`
                 /* Section fade-in */
                 .featured-section {
                     background: linear-gradient(180deg, #0f0c07 0%, #1a1508 100%);
@@ -79,39 +79,42 @@ const FeaturedBooksPage = async () => {
                 }
             `}</style>
 
-            {/* Heading */}
-            <div className="text-center mb-16 px-4">
-                <p
-                    className="featured-subtitle text-xs uppercase tracking-[0.4em] mb-3"
-                    style={{ color: '#a07840', fontFamily: 'Georgia, serif' }}
-                >
-                    Hand Picked
-                </p>
-                <h2
-                    className="featured-heading text-4xl md:text-5xl font-bold"
-                    style={{ color: '#e8d5a3', fontFamily: 'Georgia, serif' }}
-                >
-                    Featured Books
-                </h2>
-                <div
-                    className="featured-divider mx-auto mt-4 h-px w-24"
-                    style={{ background: 'linear-gradient(90deg, transparent, #e8d5a3, transparent)' }}
-                />
-            </div>
+      {/* Heading */}
+      <div className="text-center mb-16 px-4">
+        <p
+          className="featured-subtitle text-xs uppercase tracking-[0.4em] mb-3"
+          style={{ color: "#a07840", fontFamily: "Georgia, serif" }}
+        >
+          Hand Picked
+        </p>
+        <h2
+          className="featured-heading text-4xl md:text-5xl font-bold"
+          style={{ color: "#e8d5a3", fontFamily: "Georgia, serif" }}
+        >
+          Featured Books
+        </h2>
+        <div
+          className="featured-divider mx-auto mt-4 h-px w-24"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, #e8d5a3, transparent)",
+          }}
+        />
+      </div>
 
-            {/* Cards grid */}
-            <div className="container mx-auto flex justify-center gap-6 items-center flex-wrap px-4">
-                {books.map((_, index) => {
-                    const featuredbook = featuredBooks[index];
-                    return featuredbook ? (
-                        <div key={featuredbook.id} className="book-card-wrapper">
-                            <FeaturedBooksCard featuredbook={featuredbook} />
-                        </div>
-                    ) : null;
-                })}
+      {/* Cards grid */}
+      <div className="container mx-auto flex justify-center gap-6 items-center flex-wrap px-4">
+        {books.map((_, index) => {
+          const featuredbook = featuredBooks[index];
+          return featuredbook ? (
+            <div key={featuredbook.id} className="book-card-wrapper">
+              <FeaturedBooksCard featuredbook={featuredbook} />
             </div>
-        </section>
-    );
+          ) : null;
+        })}
+      </div>
+    </section>
+  );
 };
 
 export default FeaturedBooksPage;
